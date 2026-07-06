@@ -1,0 +1,460 @@
+{
+    "Dakar": {
+        "Dakar-Plateau": [{
+                "centre": "Lycée Lamine Guèye",
+                "bureaux": ["BV-DAK-1", "BV-DAK-2", "BV-DAK-3", "BV-DAK-4"]
+            },
+            {
+                "centre": "École Plateau 1",
+                "bureaux": ["BV-DAK-5", "BV-DAK-6"]
+            },
+            {
+                "centre": "École Plateau 2",
+                "bureaux": ["BV-DAK-7", "BV-DAK-8"]
+            }
+        ],
+        "Grand-Dakar": [{
+                "centre": "Lycée Blaise Diagne",
+                "bureaux": ["BV-GDA-1", "BV-GDA-2", "BV-GDA-3"]
+            },
+            {
+                "centre": "École Grand-Dakar 1",
+                "bureaux": ["BV-GDA-4", "BV-GDA-5"]
+            },
+            {
+                "centre": "École Grand-Dakar 2",
+                "bureaux": ["BV-GDA-6", "BV-GDA-7"]
+            }
+        ],
+        "Parcelles-Assainies": [{
+                "centre": "Lycée Parcelles 1",
+                "bureaux": ["BV-PAR-1", "BV-PAR-2", "BV-PAR-3", "BV-PAR-4"]
+            },
+            {
+                "centre": "École Parcelles 2",
+                "bureaux": ["BV-PAR-5", "BV-PAR-6"]
+            },
+            {
+                "centre": "École Parcelles 3",
+                "bureaux": ["BV-PAR-7", "BV-PAR-8", "BV-PAR-9"]
+            }
+        ],
+        "Yeumbeul": [{
+                "centre": "Lycée Yeumbeul",
+                "bureaux": ["BV-YEU-1", "BV-YEU-2", "BV-YEU-3"]
+            },
+            {
+                "centre": "École Yeumbeul 1",
+                "bureaux": ["BV-YEU-4", "BV-YEU-5"]
+            }
+        ],
+        "Guédiawaye": [{
+                "centre": "Lycée Guédiawaye",
+                "bureaux": ["BV-GUE-1", "BV-GUE-2", "BV-GUE-3"]
+            },
+            {
+                "centre": "École Guédiawaye 1",
+                "bureaux": ["BV-GUE-4", "BV-GUE-5"]
+            }
+        ],
+        "Pikine": [{
+                "centre": "Lycée Pikine 1",
+                "bureaux": ["BV-PIK-1", "BV-PIK-2", "BV-PIK-3", "BV-PIK-4"]
+            },
+            {
+                "centre": "École Pikine 2",
+                "bureaux": ["BV-PIK-5", "BV-PIK-6"]
+            },
+            {
+                "centre": "École Pikine 3",
+                "bureaux": ["BV-PIK-7", "BV-PIK-8"]
+            }
+        ],
+        "Rufisque": [{
+                "centre": "Lycée Rufisque",
+                "bureaux": ["BV-RUF-1", "BV-RUF-2", "BV-RUF-3"]
+            },
+            {
+                "centre": "École Rufisque 1",
+                "bureaux": ["BV-RUF-4", "BV-RUF-5"]
+            }
+        ]
+    },
+
+    "Thiès": {
+        "Thiès-Ville": [{
+                "centre": "Lycée Thiès 1",
+                "bureaux": ["BV-THI-1", "BV-THI-2", "BV-THI-3", "BV-THI-4"]
+            },
+            {
+                "centre": "École Thiès Centre",
+                "bureaux": ["BV-THI-5", "BV-THI-6"]
+            },
+            {
+                "centre": "École Thiès Est",
+                "bureaux": ["BV-THI-7", "BV-THI-8"]
+            }
+        ],
+        "Mbour": [{
+                "centre": "Lycée Mbour 1",
+                "bureaux": ["BV-MBO-1", "BV-MBO-2", "BV-MBO-3"]
+            },
+            {
+                "centre": "École Mbour 1",
+                "bureaux": ["BV-MBO-4", "BV-MBO-5"]
+            },
+            {
+                "centre": "École Mbour 2",
+                "bureaux": ["BV-MBO-6", "BV-MBO-7"]
+            }
+        ],
+        "Tivaouane": [{
+                "centre": "Lycée Tivaouane",
+                "bureaux": ["BV-TIV-1", "BV-TIV-2", "BV-TIV-3"]
+            },
+            {
+                "centre": "École Tivaouane 1",
+                "bureaux": ["BV-TIV-4", "BV-TIV-5"]
+            }
+        ],
+        "Joal-Fadiouth": [{
+            "centre": "École Joal 1",
+            "bureaux": ["BV-JOA-1", "BV-JOA-2"]
+        }]
+    },
+
+    "Diourbel": {
+        "Diourbel-Ville": [{
+                "centre": "Lycée Diourbel 1",
+                "bureaux": ["BV-DIO-1", "BV-DIO-2", "BV-DIO-3"]
+            },
+            {
+                "centre": "École Diourbel Centre",
+                "bureaux": ["BV-DIO-4", "BV-DIO-5"]
+            }
+        ],
+        "Bambey": [{
+                "centre": "Lycée Bambey",
+                "bureaux": ["BV-BAM-1", "BV-BAM-2", "BV-BAM-3"]
+            },
+            {
+                "centre": "École Bambey 1",
+                "bureaux": ["BV-BAM-4", "BV-BAM-5"]
+            }
+        ],
+        "Mbacké": [{
+                "centre": "Lycée Mbacké",
+                "bureaux": ["BV-MBA-1", "BV-MBA-2", "BV-MBA-3"]
+            },
+            {
+                "centre": "École Mbacké 1",
+                "bureaux": ["BV-MBA-4", "BV-MBA-5"]
+            }
+        ]
+    },
+
+    "Fatick": {
+        "Fatick-Ville": [{
+                "centre": "Lycée Fatick",
+                "bureaux": ["BV-FAT-1", "BV-FAT-2", "BV-FAT-3"]
+            },
+            {
+                "centre": "École Fatick 1",
+                "bureaux": ["BV-FAT-4", "BV-FAT-5"]
+            }
+        ],
+        "Foundiougne": [{
+                "centre": "Lycée Foundiougne",
+                "bureaux": ["BV-FOU-1", "BV-FOU-2", "BV-FOU-3"]
+            },
+            {
+                "centre": "École Foundiougne 1",
+                "bureaux": ["BV-FOU-4", "BV-FOU-5"]
+            }
+        ],
+        "Gossas": [{
+            "centre": "Lycée Gossas",
+            "bureaux": ["BV-GOS-1", "BV-GOS-2"]
+        }]
+    },
+
+    "Kaolack": {
+        "Kaolack-Ville": [{
+                "centre": "Lycée Kaolack 1",
+                "bureaux": ["BV-KAO-1", "BV-KAO-2", "BV-KAO-3", "BV-KAO-4"]
+            },
+            {
+                "centre": "École Kaolack Centre",
+                "bureaux": ["BV-KAO-5", "BV-KAO-6"]
+            },
+            {
+                "centre": "École Kaolack Sud",
+                "bureaux": ["BV-KAO-7", "BV-KAO-8"]
+            }
+        ],
+        "Guinguinéo": [{
+                "centre": "Lycée Guinguinéo",
+                "bureaux": ["BV-GUI-1", "BV-GUI-2"]
+            },
+            {
+                "centre": "École Guinguinéo 1",
+                "bureaux": ["BV-GUI-3", "BV-GUI-4"]
+            }
+        ],
+        "Nioro": [{
+            "centre": "Lycée Nioro",
+            "bureaux": ["BV-NIO-1", "BV-NIO-2"]
+        }]
+    },
+
+    "Kaffrine": {
+        "Kaffrine-Ville": [{
+                "centre": "Lycée Kaffrine",
+                "bureaux": ["BV-KAF-1", "BV-KAF-2", "BV-KAF-3"]
+            },
+            {
+                "centre": "École Kaffrine 1",
+                "bureaux": ["BV-KAF-4", "BV-KAF-5"]
+            }
+        ],
+        "Birkelane": [{
+            "centre": "Lycée Birkelane",
+            "bureaux": ["BV-BIR-1", "BV-BIR-2"]
+        }],
+        "Malem-Hodar": [{
+            "centre": "Lycée Malem-Hodar",
+            "bureaux": ["BV-MAL-1", "BV-MAL-2"]
+        }]
+    },
+
+    "Kédougou": {
+        "Kédougou-Ville": [{
+                "centre": "Lycée Kédougou",
+                "bureaux": ["BV-KED-1", "BV-KED-2", "BV-KED-3"]
+            },
+            {
+                "centre": "École Kédougou 1",
+                "bureaux": ["BV-KED-4", "BV-KED-5"]
+            }
+        ],
+        "Salémata": [{
+            "centre": "Lycée Salémata",
+            "bureaux": ["BV-SAL-1", "BV-SAL-2"]
+        }],
+        "Saraya": [{
+            "centre": "Lycée Saraya",
+            "bureaux": ["BV-SAR-1", "BV-SAR-2"]
+        }]
+    },
+
+    "Kolda": {
+        "Kolda-Ville": [{
+                "centre": "Lycée Kolda 1",
+                "bureaux": ["BV-KOL-1", "BV-KOL-2", "BV-KOL-3"]
+            },
+            {
+                "centre": "École Kolda Centre",
+                "bureaux": ["BV-KOL-4", "BV-KOL-5"]
+            }
+        ],
+        "Vélingara": [{
+                "centre": "Lycée Vélingara",
+                "bureaux": ["BV-VEL-1", "BV-VEL-2", "BV-VEL-3"]
+            },
+            {
+                "centre": "École Vélingara 1",
+                "bureaux": ["BV-VEL-4", "BV-VEL-5"]
+            }
+        ],
+        "Médina-Yoro-Foulah": [{
+            "centre": "Lycée Médina",
+            "bureaux": ["BV-MED-1", "BV-MED-2"]
+        }]
+    },
+
+    "Louga": {
+        "Louga-Ville": [{
+                "centre": "Lycée Louga 1",
+                "bureaux": ["BV-LOU-1", "BV-LOU-2", "BV-LOU-3"]
+            },
+            {
+                "centre": "École Louga Centre",
+                "bureaux": ["BV-LOU-4", "BV-LOU-5"]
+            }
+        ],
+        "Linguère": [{
+                "centre": "Lycée Linguère",
+                "bureaux": ["BV-LIN-1", "BV-LIN-2"]
+            },
+            {
+                "centre": "École Linguère 1",
+                "bureaux": ["BV-LIN-3", "BV-LIN-4"]
+            }
+        ],
+        "Kébémer": [{
+            "centre": "Lycée Kébémer",
+            "bureaux": ["BV-KEB-1", "BV-KEB-2"]
+        }]
+    },
+
+    "Matam": {
+        "Matam-Ville": [{
+                "centre": "Lycée Matam",
+                "bureaux": ["BV-MAT-1", "BV-MAT-2", "BV-MAT-3"]
+            },
+            {
+                "centre": "École Matam 1",
+                "bureaux": ["BV-MAT-4", "BV-MAT-5"]
+            }
+        ],
+        "Kanel": [{
+            "centre": "Lycée Kanel",
+            "bureaux": ["BV-KAN-1", "BV-KAN-2"]
+        }],
+        "Ranérou": [{
+            "centre": "Lycée Ranérou",
+            "bureaux": ["BV-RAN-1", "BV-RAN-2"]
+        }]
+    },
+
+    "Saint-Louis": {
+        "Saint-Louis-Ville": [{
+                "centre": "Lycée Saint-Louis 1",
+                "bureaux": ["BV-SAI-1", "BV-SAI-2", "BV-SAI-3", "BV-SAI-4"]
+            },
+            {
+                "centre": "École Saint-Louis Centre",
+                "bureaux": ["BV-SAI-5", "BV-SAI-6"]
+            },
+            {
+                "centre": "École Saint-Louis Nord",
+                "bureaux": ["BV-SAI-7", "BV-SAI-8"]
+            }
+        ],
+        "Dagana": [{
+            "centre": "Lycée Dagana",
+            "bureaux": ["BV-DAG-1", "BV-DAG-2"]
+        }],
+        "Podor": [{
+                "centre": "Lycée Podor",
+                "bureaux": ["BV-POD-1", "BV-POD-2", "BV-POD-3"]
+            },
+            {
+                "centre": "École Podor 1",
+                "bureaux": ["BV-POD-4", "BV-POD-5"]
+            }
+        ]
+    },
+
+    "Sédhiou": {
+        "Sédhiou-Ville": [{
+                "centre": "Lycée Sédhiou",
+                "bureaux": ["BV-SED-1", "BV-SED-2", "BV-SED-3"]
+            },
+            {
+                "centre": "École Sédhiou 1",
+                "bureaux": ["BV-SED-4", "BV-SED-5"]
+            }
+        ],
+        "Bounkiling": [{
+            "centre": "Lycée Bounkiling",
+            "bureaux": ["BV-BOU-1", "BV-BOU-2"]
+        }],
+        "Goudomp": [{
+                "centre": "Lycée Goudomp",
+                "bureaux": ["BV-GOU-1", "BV-GOU-2", "BV-GOU-3"]
+            },
+            {
+                "centre": "École Goudomp 1",
+                "bureaux": ["BV-GOU-4", "BV-GOU-5"]
+            }
+        ]
+    },
+
+    "Tambacounda": {
+        "Tambacounda-Ville": [{
+                "centre": "Lycée Tambacounda 1",
+                "bureaux": ["BV-TAM-1", "BV-TAM-2", "BV-TAM-3"]
+            },
+            {
+                "centre": "École Tambacounda Centre",
+                "bureaux": ["BV-TAM-4", "BV-TAM-5"]
+            },
+            {
+                "centre": "École Tambacounda Sud",
+                "bureaux": ["BV-TAM-6", "BV-TAM-7"]
+            }
+        ],
+        "Bakel": [{
+            "centre": "Lycée Bakel",
+            "bureaux": ["BV-BAK-1", "BV-BAK-2"]
+        }],
+        "Goudiry": [{
+            "centre": "Lycée Goudiry",
+            "bureaux": ["BV-GOU-1", "BV-GOU-2"]
+        }]
+    },
+
+    "Ziguinchor": {
+        "Ziguinchor-Ville": [{
+                "centre": "Lycée Ziguinchor 1",
+                "bureaux": ["BV-ZIG-1", "BV-ZIG-2", "BV-ZIG-3", "BV-ZIG-4"]
+            },
+            {
+                "centre": "École Ziguinchor Centre",
+                "bureaux": ["BV-ZIG-5", "BV-ZIG-6"]
+            }
+        ],
+        "Bignona": [{
+                "centre": "Lycée Bignona",
+                "bureaux": ["BV-BIG-1", "BV-BIG-2", "BV-BIG-3"]
+            },
+            {
+                "centre": "École Bignona 1",
+                "bureaux": ["BV-BIG-4", "BV-BIG-5"]
+            }
+        ],
+        "Oussouye": [{
+            "centre": "Lycée Oussouye",
+            "bureaux": ["BV-USS-1", "BV-USS-2"]
+        }]
+    },
+
+    "Diaspora": {
+        "Europe": [{
+                "centre": "Consulat Général Paris",
+                "bureaux": ["BV-DIA-EUR-1", "BV-DIA-EUR-2", "BV-DIA-EUR-3"]
+            },
+            {
+                "centre": "Consulat Milan",
+                "bureaux": ["BV-DIA-EUR-4", "BV-DIA-EUR-5"]
+            },
+            {
+                "centre": "Ambassade Bruxelles",
+                "bureaux": ["BV-DIA-EUR-6", "BV-DIA-EUR-7"]
+            }
+        ],
+        "Amérique": [{
+                "centre": "Consulat New York",
+                "bureaux": ["BV-DIA-AME-1", "BV-DIA-AME-2"]
+            },
+            {
+                "centre": "Consulat Montréal",
+                "bureaux": ["BV-DIA-AME-3", "BV-DIA-AME-4"]
+            }
+        ],
+        "Afrique": [{
+                "centre": "Ambassade Nouakchott",
+                "bureaux": ["BV-DIA-AFR-1", "BV-DIA-AFR-2"]
+            },
+            {
+                "centre": "Ambassade Bamako",
+                "bureaux": ["BV-DIA-AFR-3", "BV-DIA-AFR-4"]
+            }
+        ],
+        "Asie-Océanie": [{
+            "centre": "Ambassade Pékin",
+            "bureaux": ["BV-DIA-ASI-1", "BV-DIA-ASI-2"]
+        }]
+    }
+}

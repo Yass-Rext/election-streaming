@@ -1,0 +1,43 @@
+[{
+        "id": "C001",
+        "nom": "Diouf",
+        "prenom": "Amadou",
+        "parti": "PDS",
+        "couleur": "#E74C3C"
+    },
+    {
+        "id": "C002",
+        "nom": "Sall",
+        "prenom": "Macky",
+        "parti": "APR",
+        "couleur": "#2ECC71"
+    },
+    {
+        "id": "C003",
+        "nom": "Faye",
+        "prenom": "PR Diomaye",
+        "parti": "PASTEF",
+        "couleur": "#3498DB"
+    },
+    {
+        "id": "C004",
+        "nom": "Sonko",
+        "prenom": "Ousmane",
+        "parti": "PASTEF",
+        "couleur": "#F1C40F"
+    },
+    {
+        "id": "C005",
+        "nom": "Ba",
+        "prenom": "Amadou",
+        "parti": "BBY",
+        "couleur": "#9B59B6"
+    },
+    {
+        "id": "C006",
+        "nom": "Dia",
+        "prenom": "Khalifa",
+        "parti": "MTS",
+        "couleur": "#1ABC9C"
+    }
+]
