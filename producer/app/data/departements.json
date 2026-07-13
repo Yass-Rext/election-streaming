@@ -1,0 +1,16 @@
+{
+    "Dakar": ["Dakar-Plateau", "Grand-Dakar", "Parcelles-Assainies", "Yeumbeul", "Guédiawaye", "Pikine", "Rufisque"],
+    "Thiès": ["Thiès-Ville", "Mbour", "Tivaouane", "Joal-Fadiouth"],
+    "Diourbel": ["Diourbel-Ville", "Bambey", "Mbacké"],
+    "Fatick": ["Fatick-Ville", "Foundiougne", "Gossas"],
+    "Kaolack": ["Kaolack-Ville", "Guinguinéo", "Nioro du Rip"],
+    "Kaffrine": ["Kaffrine-Ville", "Birkelane", "Malem Hodar"],
+    "Kédougou": ["Kédougou-Ville", "Salémata", "Saraya"],
+    "Kolda": ["Kolda-Ville", "Vélingara", "Médina Yoro Foulah"],
+    "Louga": ["Louga-Ville", "Kébémer", "Linguère"],
+    "Matam": ["Matam-Ville", "Kanel", "Ranérou"],
+    "Saint-Louis": ["Saint-Louis-Ville", "Dagana", "Podor"],
+    "Sédhiou": ["Sédhiou-Ville", "Bounkiling", "Goudomp"],
+    "Tambacounda": ["Tambacounda-Ville", "Bakel", "Goudiry"],
+    "Ziguinchor": ["Ziguinchor-Ville", "Bignona", "Oussouye"]
+}

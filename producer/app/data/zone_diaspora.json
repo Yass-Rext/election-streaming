@@ -1,0 +1,125 @@
+{
+    "Europe": [{
+            "pays": "France",
+            "villes": {
+                "Paris": 5,
+                "Marseille": 3,
+                "Lyon": 2
+            }
+        },
+        {
+            "pays": "Italie",
+            "villes": {
+                "Milan": 3,
+                "Rome": 2
+            }
+        },
+        {
+            "pays": "Espagne",
+            "villes": {
+                "Madrid": 2,
+                "Barcelone": 2
+            }
+        },
+        {
+            "pays": "Allemagne",
+            "villes": {
+                "Berlin": 2,
+                "Hambourg": 1
+            }
+        },
+        {
+            "pays": "Belgique",
+            "villes": {
+                "Bruxelles": 3
+            }
+        },
+        {
+            "pays": "Royaume-Uni",
+            "villes": {
+                "Londres": 4
+            }
+        }
+    ],
+
+    "Amérique": [{
+            "pays": "États-Unis",
+            "villes": {
+                "New York": 5,
+                "Washington": 2,
+                "Houston": 2
+            }
+        },
+        {
+            "pays": "Canada",
+            "villes": {
+                "Montréal": 3,
+                "Toronto": 3
+            }
+        },
+        {
+            "pays": "Brésil",
+            "villes": {
+                "São Paulo": 2
+            }
+        }
+    ],
+
+    "Afrique": [{
+            "pays": "Mauritanie",
+            "villes": {
+                "Nouakchott": 2
+            }
+        },
+        {
+            "pays": "Mali",
+            "villes": {
+                "Bamako": 3
+            }
+        },
+        {
+            "pays": "Côte d'Ivoire",
+            "villes": {
+                "Abidjan": 4
+            }
+        },
+        {
+            "pays": "Guinée",
+            "villes": {
+                "Conakry": 2
+            }
+        },
+        {
+            "pays": "Gambie",
+            "villes": {
+                "Banjul": 1
+            }
+        }
+    ],
+
+    "Asie-Océanie": [{
+            "pays": "Chine",
+            "villes": {
+                "Pékin": 2
+            }
+        },
+        {
+            "pays": "Japon",
+            "villes": {
+                "Tokyo": 2
+            }
+        },
+        {
+            "pays": "Australie",
+            "villes": {
+                "Sydney": 2
+            }
+        },
+        {
+            "pays": "Inde",
+            "villes": {
+                "Mumbai": 2
+            }
+        }
+    ]
+}
