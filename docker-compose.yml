@@ -1,64 +1,168 @@
-version: "3.9"
+# ============================================================
+# DOCKER COMPOSE - Infrastructure de traitement de votes
+# ============================================================
 
 services:
 
-  # =========================
-  # KAFKA (KRaft mode)
-  # =========================
+  # ==========================================================
+  # 1. KAFKA - Broker de messages en mode KRaft
+  # ==========================================================
   kafka:
     image: apache/kafka:latest
     container_name: kafka
-
     ports:
       - "9092:9092"
       - "9093:9093"
-
     environment:
       KAFKA_NODE_ID: 1
       KAFKA_PROCESS_ROLES: broker,controller
-
       KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
-
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
       KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
-
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
-
       KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
-
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
-
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
-
-      CLUSTER_ID: "MkU3OEVBNTcwNTJENDM2Qk=="  
-
+      CLUSTER_ID: "MkU3OEVBNTcwNTJENDM2Qk=="
+      
+      # ===== AJOUT POUR KRaft =====
+      # Donner plus de temps pour le démarrage
+      KAFKA_LOG4J_ROOT_LOGLEVEL: INFO
+      KAFKA_TOOLS_LOG4J_LOGLEVEL: INFO
     networks:
       - election-net
 
-  # =========================
-  # KAFKA UI
-  # =========================
+  # ==========================================================
+  # 2. KAFKA UI - Interface Web de Monitoring
+  # ==========================================================
   kafka-ui:
     image: provectuslabs/kafka-ui:latest
     container_name: kafka-ui
     restart: always
-
     ports:
       - "8080:8080"
-
     environment:
       KAFKA_CLUSTERS_0_NAME: election-cluster
-      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: localhost:9092
-
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:9092
     depends_on:
       - kafka
+    networks:
+      - election-net
+
+  # ==========================================================
+  # 3. PRODUCER - Producteur Python de votes
+  # ==========================================================
+  producer:
+    build:
+      context: ./producer
+    container_name: election-producer
+    restart: on-failure
+    environment:
+      KAFKA_SERVER: kafka:9092
+      KAFKA_TOPIC: votes
+    volumes:
+      - ./producer/app:/app
+    depends_on:
+      - kafka  # Dépend de kafka
+    networks:
+      - election-net
+
+  # ==========================================================
+  # 4. SPARK MASTER - Apache Spark officiel
+  # ==========================================================
+  spark-master:
+    image: apache/spark:latest
+    container_name: election-spark-master
+    environment:
+      SPARK_MASTER_HOST: spark-master
+      SPARK_MASTER_PORT: 7077
+      SPARK_MASTER_WEBUI_PORT: 8080
+      SPARK_RPC_AUTHENTICATION_ENABLED: no
+      SPARK_RPC_ENCRYPTION_ENABLED: no
+      SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED: no
+      SPARK_SSL_ENABLED: no
+      HOME: /tmp
+    command: /opt/spark/bin/spark-class org.apache.spark.deploy.master.Master
+    ports:
+      - "8081:8080"
+      - "7077:7077"
+
+    volumes:
+      - ./spark/jobs:/opt/spark-apps/jobs
+      - spark_ivy:/tmp/.ivy2
 
     networks:
       - election-net
 
+  # ==========================================================
+  # 5. SPARK WORKER - Apache Spark officiel
+  # ==========================================================
+  spark-worker:
+    image: apache/spark:latest
+    container_name: election-spark-worker
+    depends_on:
+      - spark-master
+    environment:
+      SPARK_MASTER_URL: spark://spark-master:7077
+      SPARK_WORKER_MEMORY: 1G
+      SPARK_WORKER_CORES: 1
+    command: /opt/spark/bin/spark-class org.apache.spark.deploy.worker.Worker spark://spark-master:7077
+
+    volumes:
+      - ./spark/jobs:/opt/spark-apps/jobs
+    networks:
+      - election-net
+
+  # ==========================================================
+  # 6. POSTGRESQL - Base de données
+  # ==========================================================
+  postgres:
+    image: postgres:16
+    container_name: postgres-election
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: election
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - election-net
+
+  # ==========================================================
+  # 7. MINIO - Stockage d'objets (Data Lake)
+  # ==========================================================
+  minio:
+    image: minio/minio
+    container_name: minio-election
+    restart: always
+    command: server /data --console-address ":9001"
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: admin@election.sn
+      MINIO_ROOT_PASSWORD: password
+    volumes:
+      - minio_data:/data
+    networks:
+      - election-net
+
+# ============================================================
+# VOLUMES PERSISTANTS
+# ============================================================
+volumes:
+  postgres_data:
+  minio_data:
+  spark_ivy:
+
+# ============================================================
+# RÉSEAU
+# ============================================================
 networks:
   election-net:
     driver: bridge

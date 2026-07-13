@@ -1,9 +1,16 @@
-FROM python:3.10
+FROM python:3.11-slim
+
 
 WORKDIR /app
 
-COPY . /app
 
-RUN pip install -r requirements.txt
+COPY requirements.txt .
 
-CMD ["python", "app/producer.py"]
+
+RUN pip install --no-cache-dir -r requirements.txt
+
+
+COPY app/ .
+
+
+CMD ["python", "main.py"]

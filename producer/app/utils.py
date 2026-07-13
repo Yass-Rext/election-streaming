@@ -1,9 +1,15 @@
 import json
 import os
 
-BASE_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../config"))
+
+DATA_PATH = "/app/data"
+
 
 def load_json(filename):
-    path = os.path.join(BASE_PATH, filename)
-    with open(path, "r", encoding="utf-8") as f:
-        return json.load(f)
+
+    path = os.path.join(DATA_PATH, filename)
+
+    print(f"Chargement du fichier : {path}")
+
+    with open(path, "r", encoding="utf-8") as file:
+        return json.load(file)
