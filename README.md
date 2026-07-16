@@ -71,7 +71,7 @@ Le projet vise à :
 
 | Technologie                | Rôle                     |
 | -------------------------- | ------------------------ |
-| Python 3.12                | Génération des votes     |
+| Python 3.11                | Génération des votes     |
 | Apache Kafka               | Message Broker           |
 | Spark Structured Streaming | Traitement temps réel    |
 | PostgreSQL                 | Stockage des agrégations |
@@ -228,7 +228,7 @@ Le projet crée automatiquement les tables suivantes :
 ## 1. Cloner le projet
 
 ```bash
-git clone https://github.com/<votre-utilisateur>/election-streaming.git
+git clone https://github.com/Yass-Rext/election-streaming.git
 cd election-streaming
 ```
 
