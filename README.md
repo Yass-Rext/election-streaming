@@ -282,6 +282,7 @@ Les données sont mises à jour automatiquement à partir de PostgreSQL.
 # 👨‍💻 Auteur
 
 **Mamadou Yassarou Diallo**
+**Fallou Diouk**
 
 Projet réalisé dans le cadre d'un projet de Data Engineering.
 
