@@ -3,17 +3,16 @@ import plotly.express as px
 
 from database import load_table
 
-st.title("📍 Votes par région")
+st.title("🌍 Votes de la diaspora")
 
-df = load_table("resultats_regions")
+df = load_table("resultats_diaspora")
 
 st.dataframe(df, use_container_width=True)
 
-fig = px.bar(
+fig = px.sunburst(
     df,
-    x="region",
-    y="nb_votes",
-    color="region"
+    path=["continent", "pays"],
+    values="nb_votes"
 )
 
 st.plotly_chart(fig, use_container_width=True)

@@ -1,7 +1,7 @@
 # ============================================================
 # DOCKER COMPOSE - Infrastructure de traitement de votes
 # ============================================================
-
+name: election-streaming
 services:
 
   # ==========================================================
@@ -31,6 +31,12 @@ services:
       # Donner plus de temps pour le démarrage
       KAFKA_LOG4J_ROOT_LOGLEVEL: INFO
       KAFKA_TOOLS_LOG4J_LOGLEVEL: INFO
+
+    healthcheck:
+      test: ["CMD", "bash", "-c", "echo > /dev/tcp/localhost/9092"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
     networks:
       - election-net
 
@@ -61,11 +67,12 @@ services:
     restart: on-failure
     environment:
       KAFKA_SERVER: kafka:9092
-      KAFKA_TOPIC: votes
+      KAFKA_TOPIC: ${KAFKA_TOPIC}
     volumes:
       - ./producer/app:/app
     depends_on:
-      - kafka  # Dépend de kafka
+      kafka:
+        condition: service_healthy
     networks:
       - election-net
 
@@ -73,7 +80,7 @@ services:
   # 4. SPARK MASTER - Apache Spark officiel
   # ==========================================================
   spark-master:
-    image: apache/spark:latest
+    image: apache/spark:3.5.1
     container_name: election-spark-master
     environment:
       SPARK_MASTER_HOST: spark-master
@@ -100,7 +107,7 @@ services:
   # 5. SPARK WORKER - Apache Spark officiel
   # ==========================================================
   spark-worker:
-    image: apache/spark:latest
+    image: apache/spark:3.5.1
     container_name: election-spark-worker
     depends_on:
       - spark-master
@@ -115,6 +122,56 @@ services:
     networks:
       - election-net
 
+  spark-app:
+    build:
+      context: ./spark
+    container_name: election-spark-app
+
+    depends_on:
+      - kafka
+      - postgres
+      - minio
+      - spark-master
+
+    # depends_on:
+    #   kafka:
+    #     condition: service_healthy
+    #   postgres:
+    #     condition: service_started
+    #   spark-master:
+    #     condition: service_started
+    #   minio:
+    #     condition: service_started
+
+    command: >
+      /opt/spark/bin/spark-submit
+      --master spark://spark-master:7077
+      --packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.5.1,org.postgresql:postgresql:42.7.3,org.apache.hadoop:hadoop-aws:3.3.4
+      /app/app.py
+
+    environment:
+      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      KAFKA_TOPIC: votes
+
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+
+      MINIO_ENDPOINT: minio:9000
+      MINIO_ACCESS_KEY: ${MINIO_ROOT_USER}
+      MINIO_SECRET_KEY: ${MINIO_ROOT_PASSWORD}
+      MINIO_BUCKET: votes
+
+    volumes:
+      - ./spark/app:/app
+      - spark_checkpoints:/app/checkpoints  
+      - spark_ivy:/root/.ivy2
+
+    networks:
+      - election-net
+
   # ==========================================================
   # 6. POSTGRESQL - Base de données
   # ==========================================================
@@ -125,11 +182,29 @@ services:
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_DB: election
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - election-net
+
+  pgadmin:
+    image: dpage/pgadmin4
+
+    container_name: pgadmin
+
+    ports:
+      - "5050:80"
+
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+
+    depends_on:
+      - postgres
+
     networks:
       - election-net
 
@@ -145,10 +220,52 @@ services:
       - "9000:9000"
       - "9001:9001"
     environment:
-      MINIO_ROOT_USER: admin@election.sn
-      MINIO_ROOT_PASSWORD: password
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
     volumes:
       - minio_data:/data
+    networks:
+      - election-net
+
+
+  mc:
+    image: minio/mc
+
+    depends_on:
+      - minio
+
+    entrypoint: >
+      /bin/sh -c "
+      sleep 10;
+      mc alias set local http://minio:9000 admin@election.sn password;
+      mc mb local/votes;
+      exit 0;
+      "
+
+    networks:
+      - election-net
+
+
+
+  dashboard:
+    build:
+      context: ./dashboard
+
+    container_name: election-dashboard
+
+    ports:
+      - "8501:8501"
+
+    depends_on:
+      - postgres
+
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+
     networks:
       - election-net
 
@@ -159,6 +276,7 @@ volumes:
   postgres_data:
   minio_data:
   spark_ivy:
+  spark_checkpoints:
 
 # ============================================================
 # RÉSEAU
