@@ -79,52 +79,70 @@ services:
   # ==========================================================
   # 4. SPARK MASTER - Apache Spark officiel
   # ==========================================================
+  # ==========================================================
+  # SPARK MASTER
+  # ==========================================================
   spark-master:
     image: apache/spark:3.5.1
     container_name: election-spark-master
+
+    command:
+      - /opt/spark/bin/spark-class
+      - org.apache.spark.deploy.master.Master
+
     environment:
       SPARK_MASTER_HOST: spark-master
       SPARK_MASTER_PORT: 7077
       SPARK_MASTER_WEBUI_PORT: 8080
-      SPARK_RPC_AUTHENTICATION_ENABLED: no
-      SPARK_RPC_ENCRYPTION_ENABLED: no
-      SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED: no
-      SPARK_SSL_ENABLED: no
       HOME: /tmp
-    command: /opt/spark/bin/spark-class org.apache.spark.deploy.master.Master
+
     ports:
-      - "8081:8080"
       - "7077:7077"
+      - "8081:8080"
 
     volumes:
-      - ./spark/jobs:/opt/spark-apps/jobs
       - spark_ivy:/tmp/.ivy2
 
     networks:
       - election-net
 
+
+
   # ==========================================================
-  # 5. SPARK WORKER - Apache Spark officiel
+  # SPARK WORKER
   # ==========================================================
   spark-worker:
     image: apache/spark:3.5.1
     container_name: election-spark-worker
+
     depends_on:
       - spark-master
+
+    command:
+      - /opt/spark/bin/spark-class
+      - org.apache.spark.deploy.worker.Worker
+      - spark://spark-master:7077
+
     environment:
-      SPARK_MASTER_URL: spark://spark-master:7077
-      SPARK_WORKER_MEMORY: 1G
-      SPARK_WORKER_CORES: 1
-    command: /opt/spark/bin/spark-class org.apache.spark.deploy.worker.Worker spark://spark-master:7077
+      SPARK_WORKER_MEMORY: 2G
+      SPARK_WORKER_CORES: 2
+      HOME: /tmp
 
     volumes:
-      - ./spark/jobs:/opt/spark-apps/jobs
+      - spark_ivy:/tmp/.ivy2
+
     networks:
       - election-net
 
+
+
+  # ==========================================================
+  # SPARK STREAMING APP
+  # ==========================================================
   spark-app:
     build:
       context: ./spark
+
     container_name: election-spark-app
 
     depends_on:
@@ -132,24 +150,11 @@ services:
       - postgres
       - minio
       - spark-master
-
-    # depends_on:
-    #   kafka:
-    #     condition: service_healthy
-    #   postgres:
-    #     condition: service_started
-    #   spark-master:
-    #     condition: service_started
-    #   minio:
-    #     condition: service_started
-
-    command: >
-      /opt/spark/bin/spark-submit
-      --master spark://spark-master:7077
-      --packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.5.1,org.postgresql:postgresql:42.7.3,org.apache.hadoop:hadoop-aws:3.3.4
-      /app/app.py
+      - spark-worker
 
     environment:
+      HOME: /tmp
+
       KAFKA_BOOTSTRAP_SERVERS: kafka:9092
       KAFKA_TOPIC: votes
 
@@ -166,12 +171,11 @@ services:
 
     volumes:
       - ./spark/app:/app
-      - spark_checkpoints:/app/checkpoints  
-      - spark_ivy:/root/.ivy2
+      - spark_ivy:/tmp/.ivy2
+      - spark_checkpoints:/app/checkpoints
 
     networks:
       - election-net
-
   # ==========================================================
   # 6. POSTGRESQL - Base de données
   # ==========================================================
