@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.env
+*.log
+
+# Spark
+spark/app/checkpoints/
+metastore_db/
+derby.log
+*.crc
+_SUCCESS
+
+# IDE / OS
+.idea/
+.vscode/
+*.swp
+.DS_Store
+Thumbs.db
+
+# Docker
+*.pid
+
+# Data / caches
+.ivy2/
+.m2/

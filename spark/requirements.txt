@@ -1,3 +1,6 @@
-pyspark
-pandas
-psycopg2-binary
+pyspark==3.5.1
+pandas==2.2.3
+psycopg2-binary==2.9.10
+sqlalchemy==2.0.36
+boto3==1.35.76
+minio==7.2.12

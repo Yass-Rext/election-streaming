@@ -1,293 +1,202 @@
-# 🗳️ Election Streaming Platform
+# Election Streaming
 
-> Pipeline de traitement et de visualisation des résultats d'une élection en temps réel avec **Apache Kafka**, **Apache Spark Structured Streaming**, **PostgreSQL**, **MinIO** et **Streamlit**.
+Pipeline de **Data Engineering temps réel** pour simuler, transporter, traiter et visualiser des votes électoraux (Sénégal et diaspora).
 
----
-
-# 📖 Présentation
-
-Ce projet met en œuvre une architecture de **Data Engineering temps réel** permettant de simuler une élection nationale et de diffuser les résultats instantanément.
-
-Les votes sont générés par un producteur Python, publiés dans Kafka, traités en continu par Spark Structured Streaming, stockés dans PostgreSQL et MinIO, puis visualisés dans un tableau de bord interactif Streamlit.
+**Producer Python → Kafka KRaft (`votes`) → Spark Structured Streaming → PostgreSQL + MinIO → Streamlit**
 
 ---
 
-# 🎯 Objectifs
+## Objectifs
 
-Le projet vise à :
-
-* Simuler des votes provenant du Sénégal et de la diaspora.
-* Transporter les votes en temps réel avec Kafka.
-* Traiter les flux avec Spark Structured Streaming.
-* Calculer automatiquement les résultats.
-* Sauvegarder les votes bruts dans un Data Lake (MinIO).
-* Alimenter une base PostgreSQL pour les tableaux de bord.
-* Visualiser les résultats en temps réel avec Streamlit.
+- Simuler des votes nationaux et diaspora à partir de référentiels JSON
+- Publier les événements sur Apache Kafka (mode KRaft)
+- Traiter le flux avec Spark Structured Streaming (un seul `foreachBatch`)
+- Persister les votes bruts et les agrégations dans PostgreSQL
+- Archiver les votes en Parquet dans MinIO (data lake)
+- Visualiser les résultats via un dashboard Streamlit (lecture PostgreSQL uniquement)
 
 ---
 
-# 🏗️ Architecture
+## Architecture
 
-```text
-                    +----------------------+
-                    |  Python Producer     |
-                    | (Simulation Votes)   |
-                    +----------+-----------+
-                               |
-                               |
-                               v
-                    +----------------------+
-                    |     Apache Kafka     |
-                    |      Topic: votes    |
-                    +----------+-----------+
-                               |
-                               |
-                               v
-             +-------------------------------------+
-             | Spark Structured Streaming          |
-             |                                     |
-             | Parsing JSON                        |
-             | Validation                          |
-             | Nettoyage                           |
-             | Agrégations                         |
-             +---------------+---------------------+
-                             |
-              +--------------+---------------+
-              |                              |
-              |                              |
-              v                              v
-      PostgreSQL                     MinIO (Parquet)
-              |                              |
-              +--------------+---------------+
-                             |
-                             |
-                             v
-                  Dashboard Streamlit
+```mermaid
+flowchart LR
+  P[Producer] --> K[Kafka topic votes]
+  K --> S[Spark Structured Streaming]
+  S --> PG[(PostgreSQL)]
+  S --> M[(MinIO Parquet)]
+  PG --> D[Streamlit]
 ```
 
----
-
-# ⚙️ Technologies utilisées
-
-| Technologie                | Rôle                     |
-| -------------------------- | ------------------------ |
-| Python 3.11                | Génération des votes     |
-| Apache Kafka               | Message Broker           |
-| Spark Structured Streaming | Traitement temps réel    |
-| PostgreSQL                 | Stockage des agrégations |
-| MinIO                      | Data Lake                |
-| Streamlit                  | Dashboard                |
-| Docker                     | Conteneurisation         |
-| Docker Compose             | Orchestration            |
-| Faker                      | Génération de données    |
-| SQLAlchemy                 | Connexion PostgreSQL     |
-| Plotly                     | Visualisation            |
+Documentation détaillée : [docs/architecture.md](docs/architecture.md) · Rapport : [RAPPORT_FINAL.md](RAPPORT_FINAL.md)
 
 ---
 
-# 📁 Structure du projet
+## Technologies
+
+| Technologie | Rôle |
+| ----------- | ---- |
+| Python 3 | Producer, dashboard |
+| Apache Kafka 3.7 (KRaft) | Bus d’événements |
+| Spark 3.5.1 Structured Streaming | Traitement temps réel |
+| PostgreSQL 16 | Votes bruts + agrégations |
+| MinIO | Data lake Parquet (S3A) |
+| Streamlit + Plotly | Visualisation |
+| Docker Compose | Orchestration locale |
+
+---
+
+## Structure du dépôt
 
 ```text
 election-streaming/
-│
 ├── docker-compose.yml
-├── .env
+├── .env.example
 ├── README.md
-│
+├── RAPPORT_FINAL.md
+├── docs/                      # Documentation française complète
 ├── producer/
 │   ├── Dockerfile
-│   ├── requirements.txt
 │   └── app/
 │       ├── main.py
 │       ├── generator.py
 │       ├── kafka_client.py
 │       ├── config.py
-│       ├── utils.py
-│       └── data/
-│
+│       └── data/              # candidats.json, centres_vote.json, …
 ├── spark/
 │   ├── Dockerfile
-│   ├── requirements.txt
-│   └── app/
+│   ├── entrypoint.sh
+│   └── app/                   # Code Spark (chemins réels)
 │       ├── app.py
 │       ├── config.py
-│       ├── schema.py
+│       ├── constants.py
+│       ├── schemas.py
 │       ├── transformations.py
 │       ├── aggregations.py
 │       └── sinks/
 │           ├── postgres.py
 │           └── minio.py
-│
 ├── postgres/
-│   └── init.sql
-│
+│   ├── init.sql               # Init Docker
+│   └── schema.sql             # Miroir documentaire
 ├── dashboard/
-│   ├── Dockerfile
 │   ├── Home.py
-│   ├── requirements.txt
 │   ├── database.py
 │   └── pages/
-│
-└── docs/
+├── kafka/
+│   └── create_topics.sh
+└── scripts/
+    ├── bootstrap.sh
+    └── wait-for-it.sh
 ```
 
 ---
 
-# 🔄 Fonctionnement du pipeline
+## Démarrage rapide
 
-## 1. Génération des votes
+### Prérequis
 
-Le producteur Python génère en continu des votes réalistes.
+Docker + Docker Compose v2, ports libres (8080, 8081, 8501, 9001, 5050, 5432, 9092, …).
 
-Chaque vote contient notamment :
-
-* Identifiant
-* Horodatage
-* Nom
-* Prénom
-* Sexe
-* Âge
-* Profession
-* Région
-* Département
-* Centre
-* Bureau
-* Candidat
-* Pays (diaspora)
-
-Les données sont produites grâce aux fichiers JSON de référence.
-
----
-
-## 2. Publication Kafka
-
-Chaque vote est envoyé dans le topic :
-
-```text
-votes
-```
-
-Le producteur sérialise les données au format JSON.
-
----
-
-## 3. Traitement Spark
-
-Spark Structured Streaming :
-
-* lit le topic Kafka ;
-* convertit le JSON en DataFrame ;
-* valide les données ;
-* enrichit les votes ;
-* calcule les agrégations en temps réel.
-
-Les principales agrégations sont :
-
-* Résultats par candidat
-* Résultats par région
-* Résultats par département
-* Résultats par bureau
-* Résultats de la diaspora
-* Participation par sexe
-* Participation par tranche d'âge
-* Participation par profession
-
----
-
-## 4. Stockage
-
-### PostgreSQL
-
-Les agrégations sont enregistrées dans PostgreSQL afin d'alimenter le tableau de bord.
-
-### MinIO
-
-Les votes bruts sont archivés au format Parquet dans un bucket MinIO.
-
-Cette approche permet de constituer un Data Lake pour des traitements analytiques futurs.
-
----
-
-# 🗄️ Tables PostgreSQL
-
-Le projet crée automatiquement les tables suivantes :
-
-* resultats_candidats
-* resultats_regions
-* resultats_departements
-* resultats_bureaux
-* resultats_diaspora
-* participation_sexe
-* participation_age
-* resultats_profession
-
----
-
-# ▶️ Lancement en local
-
-## 1. Cloner le projet
+### Lancement
 
 ```bash
-git clone https://github.com/Yass-Rext/election-streaming.git
-cd election-streaming
-```
-
-## 2. Démarrer les services
-
-```bash
+cp .env.example .env
 docker compose up --build
 ```
 
-## 3. Vérifier les interfaces
+Ou : `./scripts/bootstrap.sh`
 
-| Service       | URL                   |
-| ------------- | --------------------- |
-| Kafka UI      | http://localhost:8080 |
-| Spark UI      | http://localhost:8081 |
-| Streamlit     | http://localhost:8501 |
+### Interfaces
+
+| Service | URL |
+| ------- | --- |
+| Kafka UI | http://localhost:8080 |
+| Spark UI | http://localhost:8081 |
+| Streamlit | http://localhost:8501 |
 | MinIO Console | http://localhost:9001 |
-| PgAdmin       | http://localhost:5050 |
+| PgAdmin | http://localhost:5050 |
+
+Variables d’environnement : voir `.env.example` (`POSTGRES_*`, `MINIO_*`, `KAFKA_TOPIC`, `VOTE_INTERVAL_SECONDS`, `SENEGAL_VOTE_RATIO`, `TRIGGER_INTERVAL`, `SHUFFLE_PARTITIONS`, `SPARK_WORKER_*`, …).
+
+Guide install : [docs/installation.md](docs/installation.md) · Docker : [docs/docker.md](docs/docker.md)
 
 ---
 
-# 📊 Dashboard
+## Fonctionnement du pipeline
 
-Le tableau de bord permet de consulter :
+1. **Producer** — génère un vote JSON (`vote_id`, `timestamp`, `cni`, géographie, `candidat`, …) et le publie sur le topic `votes`.
+2. **Kafka** — transporte les messages (KRaft, sans ZooKeeper).
+3. **Spark** — parse / clean / enrich, puis dans un `foreachBatch` :
+   - append Parquet → MinIO ;
+   - append → `votes_bruts` ;
+   - recalcul des tables d’agrégation (overwrite + truncate) avec `dropDuplicates(vote_id)`.
+4. **Streamlit** — affiche les KPI depuis PostgreSQL (cache 5 s).
 
-* Résultats par candidat
-* Votes par région
-* Votes par département
-* Votes par bureau
-* Répartition de la diaspora
-* Participation par sexe
-* Participation par tranche d'âge
-
-Les données sont mises à jour automatiquement à partir de PostgreSQL.
+Détails : [docs/streaming.md](docs/streaming.md) · Spark : [docs/spark.md](docs/spark.md) · Producer : [docs/producer.md](docs/producer.md)
 
 ---
 
-# 🚀 Améliorations possibles
+## Tables PostgreSQL
 
-* Détection des fraudes électorales.
-* Déduplication des votes.
-* Authentification des électeurs.
-* Intégration avec Apache Airflow.
-* Historisation des résultats.
-* Déploiement Kubernetes.
-* Surveillance avec Prometheus et Grafana.
-* Alertes en temps réel.
+| Table | Rôle |
+| ----- | ---- |
+| `votes_bruts` | Historique des votes enrichis (append) |
+| `resultats_candidats` | Votes par candidat |
+| `resultats_regions` | Votes par région (Sénégal) |
+| `resultats_departements` | Votes par département |
+| `resultats_bureaux` | Votes par bureau |
+| `resultats_diaspora` | Votes par continent / pays |
+| `participation_sexe` | Répartition par sexe |
+| `participation_age` | Répartition par tranche d’âge |
+| `resultats_profession` | Répartition par profession |
 
----
-
-# 👨‍💻 Auteur
-
-**Mamadou Yassarou Diallo**
-**Fallou Diouk**
-
-Projet réalisé dans le cadre d'un projet de Data Engineering.
+Schéma complet : [docs/postgres.md](docs/postgres.md)
 
 ---
 
-# 📜 Licence
+## Extensions métier
 
-Ce projet est distribué à des fins pédagogiques et de démonstration.
+| Action | Fichier |
+| ------ | ------- |
+| Ajouter un candidat | `producer/app/data/candidats.json` |
+| Ajouter une région / centres / bureaux | `producer/app/data/centres_vote.json` |
+
+Puis `docker compose restart producer`. Voir [docs/producer.md](docs/producer.md).
+
+---
+
+## Documentation
+
+Index : **[docs/README.md](docs/README.md)**
+
+| Document | Contenu |
+| -------- | ------- |
+| [architecture](docs/architecture.md) | Composants et diagrammes |
+| [installation](docs/installation.md) | From scratch |
+| [docker](docs/docker.md) | Services, volumes, env |
+| [kafka](docs/kafka.md) | Topic, KRaft, tests |
+| [spark](docs/spark.md) | Session, packages, foreachBatch |
+| [postgres](docs/postgres.md) | Tables et colonnes |
+| [minio](docs/minio.md) | Bucket, Parquet, S3A |
+| [dashboard](docs/dashboard.md) | Pages Streamlit |
+| [producer](docs/producer.md) | Schéma votes |
+| [streaming](docs/streaming.md) | Flux E2E |
+| [troubleshooting](docs/troubleshooting.md) | Incidents |
+| [deployment](docs/deployment.md) | Déploiement / rebuild |
+| [optimisation](docs/optimisation.md) | Tuning Spark / JDBC / MinIO |
+| [changelog](docs/changelog.md) | Bugs et correctifs |
+
+Rapport exécutif : **[RAPPORT_FINAL.md](RAPPORT_FINAL.md)**
+
+---
+
+## Auteurs
+
+**Mamadou Yassarou Diallo** · **Fallou Diouk**
+
+Projet réalisé dans un cadre pédagogique de Data Engineering.
+
+## Licence
+
+Distribution à des fins pédagogiques et de démonstration.

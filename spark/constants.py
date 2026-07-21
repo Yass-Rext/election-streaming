@@ -1,8 +1,0 @@
-RESULTATS_CANDIDATS = "resultats_candidats"
-RESULTATS_REGIONS = "resultats_regions"
-RESULTATS_DEPARTEMENTS = "resultats_departements"
-RESULTATS_BUREAUX = "resultats_bureaux"
-RESULTATS_DIASPORA = "resultats_diaspora"
-PARTICIPATION_SEXE = "participation_sexe"
-PARTICIPATION_AGE = "participation_age"
-RESULTATS_PROFESSION = "resultats_profession"
